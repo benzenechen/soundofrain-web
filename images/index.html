@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound of Rain 雨音乐队 — Seattle Chinese-American Music</title>
+<meta name="description" content="Sound of Rain is a Chinese-American band based in Seattle performing Mandopop, C-pop, and crossover music. A 501(c)(3) nonprofit promoting cultural exchange through live music.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+<link rel="apple-touch-icon" href="images/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deepest: #08090e;
+    --bg-deep: #0d0f18;
+    --bg-base: #111422;
+    --bg-raised: #171b2e;
+    --bg-surface: #1d2238;
+    --bg-hover: #242a45;
+    --text: #eae9f0;
+    --text-mid: #a09eb8;
+    --text-dim: #6b6887;
+    --brand-teal: #6EF5E8;
+    --brand-teal-deep: #5FDFD3;
+    --brand-teal-muted: rgba(110,245,232,0.15);
+    --brand-purple: #7C62FF;
+    --brand-purple-deep: #6A53E0;
+    --brand-purple-muted: rgba(124,98,255,0.15);
+    --brand-magenta: #C73DFF;
+    --brand-magenta-deep: #AF36E0;
+    --brand-magenta-muted: rgba(199,61,255,0.12);
+    --border: rgba(255,255,255,0.06);
+    --border-light: rgba(255,255,255,0.04);
+    --font-display: 'Instrument Serif', serif;
+    --font-cn: 'Noto Serif SC', serif;
+    --font-body: 'DM Sans', sans-serif;
+    --section-pad: clamp(5rem, 10vw, 8rem);
+    --side-pad: clamp(1.5rem, 5vw, 4rem);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== AMBIENT GLOW ===== */
+  .ambient-glow {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .ambient-glow .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.4;
+  }
+  .ambient-glow .orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(124,98,255,0.12) 0%, transparent 70%);
+    top: -10%; left: -10%;
+    animation: orbFloat1 20s ease-in-out infinite;
+  }
+  .ambient-glow .orb-2 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(110,245,232,0.08) 0%, transparent 70%);
+    top: 30%; right: -15%;
+    animation: orbFloat2 25s ease-in-out infinite;
+  }
+  .ambient-glow .orb-3 {
+    width: 450px; height: 450px;
+    background: radial-gradient(circle, rgba(199,61,255,0.07) 0%, transparent 70%);
+    bottom: 10%; left: 20%;
+    animation: orbFloat3 22s ease-in-out infinite;
+  }
+  @keyframes orbFloat1 { 0%,100%{transform:translate(0,0)}50%{transform:translate(80px,60px)} }
+  @keyframes orbFloat2 { 0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,-80px)} }
+  @keyframes orbFloat3 { 0%,100%{transform:translate(0,0)}50%{transform:translate(50px,-40px)} }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 1.25rem var(--side-pad);
+    display: flex; justify-content: space-between; align-items: center;
+    transition: all 0.4s ease;
+    background: transparent;
+  }
+  nav.scrolled {
+    background: rgba(13,15,24,0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+  .nav-logo img { height: 34px; width: auto; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+  .nav-links a {
+    text-decoration: none; color: var(--text-mid); font-size: 0.82rem;
+    font-weight: 400; letter-spacing: 0.02em; transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-donate {
+    padding: 0.5rem 1.3rem;
+    background: linear-gradient(135deg, var(--brand-purple), var(--brand-magenta));
+    color: #fff !important; border-radius: 100px;
+    font-size: 0.8rem !important; font-weight: 400 !important;
+    transition: all 0.3s !important;
+    display: inline-flex; align-items: center; gap: 0.35rem;
+  }
+  .nav-donate:hover { box-shadow: 0 4px 20px rgba(124,98,255,0.4); transform: translateY(-1px); }
+
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px; cursor: pointer;
+    z-index: 1001; background: none; border: none; padding: 4px;
+  }
+  .hamburger span { width: 22px; height: 1.5px; background: var(--text); transition: 0.3s; display: block; }
+
+  .mobile-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(8,9,14,0.98);
+    z-index: 999; flex-direction: column; justify-content: center; align-items: center; gap: 2rem;
+  }
+  .mobile-overlay.open { display: flex; }
+  .mobile-overlay a {
+    text-decoration: none; color: var(--text); font-family: var(--font-display);
+    font-size: 2rem; transition: color 0.3s;
+  }
+  .mobile-overlay a:hover { color: var(--brand-teal); }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem var(--side-pad) 3rem; position: relative; z-index: 1;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 100%;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 50%, rgba(124,98,255,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 80% 30%, rgba(110,245,232,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-content { max-width: 850px; position: relative; z-index: 1; }
+  .hero-eyebrow {
+    font-size: 0.78rem; font-weight: 400; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--brand-teal); margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+  .hero h1 {
+    font-family: var(--font-display); font-size: clamp(3.2rem, 8vw, 7rem);
+    font-weight: 400; line-height: 1.02; letter-spacing: -0.02em;
+    color: var(--text); margin-bottom: 0.3em;
+    opacity: 0; animation: fadeUp 0.8s ease 0.35s forwards;
+  }
+  .hero h1 .cn {
+    font-family: var(--font-cn); font-size: 0.45em; font-weight: 300;
+    color: var(--text-mid); display: block; margin-top: 0.2em;
+  }
+  .hero-desc {
+    font-size: clamp(1rem, 1.6vw, 1.15rem); color: var(--text-mid);
+    max-width: 520px; margin-bottom: 2.5rem; font-weight: 300; line-height: 1.8;
+    opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.8s ease 0.65s forwards;
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.8rem 2rem; font-family: var(--font-body); font-size: 0.85rem;
+    font-weight: 400; text-decoration: none; border-radius: 100px;
+    transition: all 0.3s ease; cursor: pointer; border: none;
+  }
+  .btn-primary { background: var(--text); color: var(--bg-deep); }
+  .btn-primary:hover { background: var(--brand-teal); color: var(--bg-deepest); }
+  .btn-outline { background: transparent; color: var(--text-mid); border: 1px solid var(--border); }
+  .btn-outline:hover { border-color: var(--text-mid); color: var(--text); }
+
+  .hero-photo-strip {
+    margin-top: 4rem; display: flex; gap: 0.75rem; overflow: hidden;
+    opacity: 0; animation: fadeUp 0.8s ease 0.85s forwards;
+  }
+  .hero-photo-strip img {
+    height: 220px; width: auto; object-fit: cover; border-radius: 6px;
+    flex-shrink: 0; opacity: 0.85; transition: opacity 0.3s;
+  }
+  .hero-photo-strip img:hover { opacity: 1; }
+
+  /* ===== SECTIONS ===== */
+  section { padding: var(--section-pad) var(--side-pad); position: relative; z-index: 1; }
+  .section-label {
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--brand-teal); margin-bottom: 1.25rem;
+  }
+  .section-title {
+    font-family: var(--font-display); font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 400; color: var(--text); line-height: 1.15; margin-bottom: 1.5rem;
+  }
+  .section-title .cn {
+    font-family: var(--font-cn); font-size: 0.55em; font-weight: 300;
+    color: var(--text-dim); margin-left: 0.4em;
+  }
+  .max-w-wide { max-width: 1200px; margin: 0 auto; }
+
+  /* ===== BAND ===== */
+  .band-section { background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-base) 100%); }
+  .band-intro {
+    max-width: 620px; color: var(--text-mid); font-size: 1.05rem;
+    line-height: 1.85; font-weight: 300; margin-bottom: 2.5rem;
+  }
+  .band-roles { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 4rem; }
+  .role-pill {
+    padding: 0.4rem 1rem; border: 1px solid var(--border); border-radius: 100px;
+    font-size: 0.78rem; font-weight: 300; color: var(--text-mid);
+    transition: all 0.3s; background: var(--bg-raised);
+  }
+  .role-pill:hover { border-color: var(--brand-teal); color: var(--brand-teal); background: var(--brand-teal-muted); }
+
+  /* ===== PHOTO GRID ===== */
+  .photo-grid {
+    display: grid; grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto auto auto; gap: 0.75rem;
+  }
+  .photo-item { border-radius: 6px; overflow: hidden; position: relative; }
+  .photo-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s ease; }
+  .photo-item:hover img { transform: scale(1.04); }
+  .photo-grid .p1 { grid-column: 1/8; grid-row: 1; min-height: 320px; }
+  .photo-grid .p2 { grid-column: 8/13; grid-row: 1; min-height: 320px; }
+  .photo-grid .p3 { grid-column: 1/5; grid-row: 2; min-height: 260px; }
+  .photo-grid .p4 { grid-column: 5/9; grid-row: 2; min-height: 260px; }
+  .photo-grid .p5 { grid-column: 9/13; grid-row: 2; min-height: 260px; }
+  .photo-grid .p6 { grid-column: 1/6; grid-row: 3; min-height: 280px; }
+  .photo-grid .p7 { grid-column: 6/13; grid-row: 3; min-height: 280px; }
+
+  /* ===== FULL BAND PHOTO ===== */
+  .full-band { padding: 0; position: relative; z-index: 1; }
+  .full-band img { width: 100%; height: 50vh; min-height: 320px; object-fit: cover; display: block; }
+  .full-band .overlay-gradient {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(13,15,24,0.3) 0%, rgba(13,15,24,0.7) 100%);
+    pointer-events: none;
+  }
+  .full-band .overlay-text { position: absolute; bottom: 2.5rem; left: var(--side-pad); color: #fff; z-index: 2; }
+  .full-band .ot-title { font-family: var(--font-display); font-size: clamp(1.5rem,3vw,2.2rem); font-weight: 400; margin-bottom: 0.25rem; }
+  .full-band .ot-sub { font-size: 0.85rem; font-weight: 300; color: rgba(255,255,255,0.65); }
+
+  /* ===== GENRE ===== */
+  .genre-section { background: linear-gradient(180deg, var(--bg-base) 0%, var(--bg-deep) 100%); }
+  .genre-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .genre-card {
+    padding: 2.5rem 2rem; background: var(--bg-raised); border-radius: 12px;
+    border: 1px solid var(--border); transition: all 0.4s ease; position: relative; overflow: hidden;
+  }
+  .genre-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--brand-teal), var(--brand-purple), var(--brand-magenta));
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .genre-card:hover { border-color: rgba(124,98,255,0.2); transform: translateY(-3px); background: var(--bg-surface); }
+  .genre-card:hover::before { opacity: 1; }
+  .genre-card .icon { font-size: 1.6rem; margin-bottom: 1.25rem; display: block; }
+  .genre-card h3 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 400; color: var(--text); margin-bottom: 0.6rem; }
+  .genre-card p { font-size: 0.88rem; color: var(--text-mid); font-weight: 300; line-height: 1.7; }
+
+  /* ===== ABOUT / NONPROFIT ===== */
+  .about-section { background: var(--bg-deep); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; margin-top: 3rem; }
+  .about-text { color: var(--text-mid); font-size: 1.02rem; line-height: 1.85; font-weight: 300; }
+  .about-text p + p { margin-top: 1.25rem; }
+  .about-features { display: grid; gap: 1.75rem; margin-top: 2.5rem; }
+  .feature-card { display: flex; gap: 1.1rem; align-items: flex-start; }
+  .feature-icon {
+    flex-shrink: 0; width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    background: var(--bg-surface); border: 1px solid var(--border);
+  }
+  .feature-card h3 { font-size: 0.9rem; font-weight: 500; color: var(--text); margin-bottom: 0.15rem; }
+  .feature-card p { font-size: 0.85rem; color: var(--text-dim); font-weight: 300; line-height: 1.6; }
+  .about-image { position: relative; border-radius: 10px; overflow: hidden; }
+  .about-image img { width: 100%; height: 460px; object-fit: cover; display: block; border-radius: 10px; }
+  .badge-501c3 {
+    position: absolute; bottom: 1.25rem; left: 1.25rem;
+    background: rgba(13,15,24,0.8); backdrop-filter: blur(12px);
+    padding: 0.5rem 1.1rem; border-radius: 100px; font-size: 0.72rem;
+    font-weight: 400; color: var(--brand-teal); border: 1px solid var(--brand-teal-muted); letter-spacing: 0.03em;
+  }
+
+  /* ===== MISSION ===== */
+  .mission-banner {
+    padding: clamp(4rem,8vw,6rem) var(--side-pad); text-align: center;
+    position: relative; z-index: 1; overflow: hidden; background: var(--bg-base);
+  }
+  .mission-banner::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 30% 50%, rgba(124,98,255,0.1) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 70% at 70% 50%, rgba(199,61,255,0.07) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .mission-quote {
+    font-family: var(--font-display); font-size: clamp(1.5rem,3.2vw,2.4rem);
+    font-weight: 400; font-style: italic; color: var(--text); max-width: 700px;
+    margin: 0 auto; line-height: 1.5; position: relative; z-index: 1;
+  }
+  .mission-quote .cn-sub {
+    display: block; font-family: var(--font-cn); font-size: 0.5em;
+    font-style: normal; font-weight: 300; margin-top: 1rem; color: var(--text-dim);
+  }
+
+  /* ===== SUPPORT / DONATE ===== */
+  .support-section {
+    background: linear-gradient(180deg, var(--bg-base) 0%, var(--bg-deep) 100%);
+    text-align: center; position: relative; z-index: 1; overflow: hidden;
+  }
+  .support-section::before {
+    content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(124,98,255,0.08) 0%, rgba(199,61,255,0.04) 40%, transparent 70%);
+    border-radius: 50%; pointer-events: none;
+  }
+  .support-inner { position: relative; z-index: 1; max-width: 560px; margin: 0 auto; }
+  .support-desc { color: var(--text-mid); font-size: 1rem; line-height: 1.8; font-weight: 300; margin-bottom: 2.5rem; }
+  .btn-donate {
+    display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.9rem 2.5rem;
+    background: linear-gradient(135deg, var(--brand-purple), var(--brand-magenta));
+    color: #fff; font-family: var(--font-body); font-size: 0.95rem; font-weight: 500;
+    text-decoration: none; border-radius: 100px; border: none; cursor: pointer;
+    transition: all 0.3s ease; box-shadow: 0 4px 24px rgba(124,98,255,0.25);
+  }
+  .btn-donate:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(124,98,255,0.4); }
+  .support-note { margin-top: 1.25rem; font-size: 0.75rem; color: var(--text-dim); font-weight: 300; }
+
+  /* ===== CONTACT ===== */
+  .contact-section { background: var(--bg-deep); border-top: 1px solid var(--border); }
+  .contact-grid { display: grid; grid-template-columns: 1fr; max-width: 500px; margin-top: 3rem; }
+  .contact-info { display: flex; flex-direction: column; gap: 2rem; }
+  .contact-item { display: flex; gap: 1rem; align-items: flex-start; }
+  .contact-item .ci-icon {
+    width: 40px; height: 40px; border-radius: 10px; background: var(--bg-surface);
+    border: 1px solid var(--border); display: flex; align-items: center;
+    justify-content: center; font-size: 1rem; flex-shrink: 0;
+  }
+  .contact-item .ci-icon svg { flex-shrink: 0; }
+  .contact-item .ci-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); font-weight: 500; margin-bottom: 0.15rem; }
+  .contact-item .ci-value { font-size: 0.92rem; color: var(--text-mid); font-weight: 300; }
+  .contact-item .ci-value a { color: var(--text-mid); text-decoration: none; border-bottom: 1px solid var(--border); transition: all 0.3s; }
+  .contact-item .ci-value a:hover { color: var(--brand-teal); border-color: var(--brand-teal); }
+
+  .contact-form { display: flex; flex-direction: column; gap: 1.1rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+  .form-group label { display: block; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.35rem; }
+  .form-group input, .form-group textarea {
+    width: 100%; padding: 0.8rem 1rem; background: var(--bg-raised);
+    border: 1px solid var(--border); border-radius: 8px; color: var(--text);
+    font-family: var(--font-body); font-size: 0.88rem; font-weight: 300; outline: none; transition: border-color 0.3s;
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: var(--text-dim); }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--brand-purple); }
+  .form-group textarea { min-height: 110px; resize: vertical; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--bg-deepest); color: var(--text-dim);
+    padding: 4rem var(--side-pad) 2.5rem; position: relative; z-index: 1;
+    border-top: 1px solid var(--border);
+  }
+  .footer-top { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 3rem; border-bottom: 1px solid var(--border); gap: 3rem; flex-wrap: wrap; }
+  .footer-brand-block { max-width: 340px; }
+  .footer-brand-block img { height: 36px; margin-bottom: 1rem; }
+  .footer-brand-block p { font-size: 0.82rem; line-height: 1.7; font-weight: 300; color: var(--text-dim); }
+  .footer-nav { display: flex; gap: 3rem; }
+  .footer-nav-group h4 { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-mid); margin-bottom: 1rem; }
+  .footer-nav-group ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+  .footer-nav-group a { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; font-weight: 300; transition: color 0.3s; }
+  .footer-nav-group a:hover { color: var(--brand-teal); }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; flex-wrap: wrap; gap: 1rem; }
+  .footer-bottom p { font-size: 0.72rem; font-weight: 300; }
+  .footer-socials { display: flex; gap: 1.5rem; }
+  .footer-socials a { color: var(--text-dim); text-decoration: none; font-size: 0.78rem; font-weight: 300; transition: color 0.3s; display: inline-flex; align-items: center; gap: 0.4rem; }
+  .footer-socials a:hover { color: var(--brand-teal); }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)} }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .genre-grid { grid-template-columns: 1fr; }
+    .photo-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .photo-grid .p1,.photo-grid .p2,.photo-grid .p3,.photo-grid .p4,.photo-grid .p5,.photo-grid .p6,.photo-grid .p7 { grid-column: auto; grid-row: auto; min-height: 220px; }
+    .photo-grid .p7 { grid-column: 1 / -1; }
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero { min-height: auto; padding-top: 7rem; padding-bottom: 3rem; }
+    .hero-photo-strip { display: none; }
+    .photo-grid { grid-template-columns: 1fr; }
+    .photo-grid .p7 { grid-column: auto; }
+    .form-row { grid-template-columns: 1fr; }
+    .footer-top { flex-direction: column; }
+    .footer-nav { flex-direction: column; gap: 2rem; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient-glow">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#" class="nav-logo">
+    <img src="images/logo-dark.svg" alt="Sound of Rain">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#band">The Band</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="https://www.zeffy.com/en-US/donation-form/donate-to-support-chinese-music" target="_blank" rel="noopener" class="nav-donate">♥ Donate</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-overlay" id="mobile-overlay">
+  <a href="#band" onclick="closeMenu()">The Band</a>
+  <a href="#gallery" onclick="closeMenu()">Gallery</a>
+  <a href="#about" onclick="closeMenu()">About</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <a href="https://www.zeffy.com/en-US/donation-form/donate-to-support-chinese-music" target="_blank" rel="noopener" onclick="closeMenu()">♥ Donate</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <p class="hero-eyebrow">Chinese-American Band · Seattle, WA</p>
+    <h1>Sound of Rain<span class="cn">雨音乐队</span></h1>
+    <p class="hero-desc">Contemporary Chinese pop, rock, and crossover music — bridging cultures through live performance in the Seattle area.</p>
+    <div class="hero-actions">
+      <a href="#band" class="btn btn-primary">Meet the Band</a>
+      <a href="#gallery" class="btn btn-outline">See Us Live</a>
+    </div>
+  </div>
+  <div class="hero-photo-strip">
+    <img src="images/IMG_3382.jpg" alt="Full band performing on stage">
+    <img src="images/P1010096.JPG" alt="Band with audience">
+    <img src="images/DSC09951.jpg" alt="Vocalist with acoustic guitar">
+    <img src="images/DZ8_8313.JPG" alt="Band members on stage">
+  </div>
+</section>
+
+<!-- FULL BAND -->
+<div class="full-band">
+  <img src="images/IMG_3382.jpg" alt="Sound of Rain full band live">
+  <div class="overlay-gradient"></div>
+  <div class="overlay-text">
+    <div class="ot-title">Sound of Rain 雨音乐队</div>
+    <div class="ot-sub">Live in Seattle</div>
+  </div>
+</div>
+
+<!-- BAND -->
+<section class="band-section" id="band">
+  <div class="max-w-wide">
+    <div class="reveal">
+      <span class="section-label">The Band</span>
+      <h2 class="section-title">Who We Are <span class="cn">关于乐队</span></h2>
+    </div>
+    <p class="band-intro reveal">Sound of Rain (雨音乐队) typically features 5–7 core members including vocals, electric and acoustic guitar, keyboard, bass, and drums. Beyond our core ensemble, we welcome rotating musicians, guest performers, and small ensembles for community events.</p>
+    <div class="band-roles reveal">
+      <span class="role-pill">Vocals</span>
+      <span class="role-pill">Acoustic Guitar</span>
+      <span class="role-pill">Electric Guitar</span>
+      <span class="role-pill">Keyboard</span>
+      <span class="role-pill">Bass</span>
+      <span class="role-pill">Drums</span>
+      <span class="role-pill">Guest Performers</span>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section style="padding-top:0; background:linear-gradient(180deg,var(--bg-base) 0%,var(--bg-deep) 100%);" id="gallery">
+  <div class="max-w-wide">
+    <div class="reveal" style="margin-bottom:2rem;">
+      <span class="section-label">Gallery</span>
+      <h2 class="section-title">Live Moments <span class="cn">演出瞬间</span></h2>
+    </div>
+    <div class="photo-grid reveal">
+      <div class="photo-item p1"><img src="images/IMG_3376.jpg" alt="Full band on stage"></div>
+      <div class="photo-item p2"><img src="images/DSC09951.jpg" alt="Vocalist and guitarist"></div>
+      <div class="photo-item p3"><img src="images/DZ8_5060.jpg" alt="Vocalist performing"></div>
+      <div class="photo-item p4"><img src="images/DSC09948.jpg" alt="Keyboardist and bass"></div>
+      <div class="photo-item p5"><img src="images/DZ8_5121.jpg" alt="Drummer"></div>
+      <div class="photo-item p6"><img src="images/DZ8_5132.jpg" alt="Bass with banner"></div>
+      <div class="photo-item p7"><img src="images/P1010096.JPG" alt="Band with audience"></div>
+    </div>
+  </div>
+</section>
+
+<!-- OUR MUSIC -->
+<section class="genre-section">
+  <div class="max-w-wide">
+    <div class="reveal">
+      <span class="section-label">Our Music</span>
+      <h2 class="section-title">What We Play <span class="cn">我们的音乐</span></h2>
+    </div>
+    <div class="genre-grid">
+      <div class="genre-card reveal">
+        <span class="icon">🎤</span>
+        <h3>Mandopop & C-Pop</h3>
+        <p>Contemporary Chinese pop and rock hits — from classic ballads to high-energy rock anthems — performed live with a full band arrangement.</p>
+      </div>
+      <div class="genre-card reveal">
+        <span class="icon">🎸</span>
+        <h3>Folk & Crossover</h3>
+        <p>We blend genres with occasional folk, acoustic, and crossover arrangements that bridge Eastern and Western musical traditions.</p>
+      </div>
+      <div class="genre-card reveal">
+        <span class="icon">🎶</span>
+        <h3>Live Collaborations</h3>
+        <p>Open jams, guest vocalists, and rotating lineups keep every performance fresh. We welcome musicians of all backgrounds.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<div class="mission-banner">
+  <blockquote class="mission-quote reveal">
+    Connecting cultures, bringing communities together, and creating meaningful musical experiences — one note at a time.
+    <span class="cn-sub">用音乐连接文化，用旋律凝聚社区</span>
+  </blockquote>
+</div>
+
+<!-- ABOUT / NONPROFIT -->
+<section class="about-section" id="about">
+  <div class="max-w-wide">
+    <div class="reveal">
+      <span class="section-label">Our Mission</span>
+      <h2 class="section-title">Sound of Rain Association <span class="cn">雨音音乐协会</span></h2>
+    </div>
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="about-text">
+          <p>Sound of Rain Association is a 501(c)(3) nonprofit music organization based in the Seattle area, dedicated to promoting Chinese-American cultural exchange through live music, performances, and community engagement.</p>
+          <p>Through contemporary Chinese pop, rock, and crossover music, we aim to connect cultures, bring communities together, and create meaningful musical experiences.</p>
+        </div>
+        <div class="about-features">
+          <div class="feature-card">
+            <div class="feature-icon">🎵</div>
+            <div><h3>Music Genre</h3><p>Modern Chinese pop and rock with folk and crossover arrangements</p></div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🌏</div>
+            <div><h3>Cultural Bridge</h3><p>Connecting Chinese and American communities through the universal language of music</p></div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <div><h3>Community Focus</h3><p>A collaborative association welcoming musicians, volunteers, and music lovers</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="about-image reveal">
+        <img src="images/DZ8_8344.JPG" alt="Sound of Rain band live">
+        <div class="badge-501c3">✦ 501(c)(3) Nonprofit Organization</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORT -->
+<section class="support-section" id="support">
+  <div class="support-inner reveal">
+    <span class="section-label">Support Us</span>
+    <h2 class="section-title">Help Us Grow <span class="cn">支持我们</span></h2>
+    <p class="support-desc">As a 501(c)(3) nonprofit, your donation helps us continue bringing Chinese-American communities together through live music, cultural events, and community engagement. Every contribution makes a difference.</p>
+    <a href="https://www.zeffy.com/en-US/donation-form/donate-to-support-chinese-music" target="_blank" rel="noopener" class="btn-donate">♥&nbsp; Donate Now</a>
+    <p class="support-note">All donations are tax-deductible. Powered by Zeffy — 100% goes to our mission.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="max-w-wide">
+    <div class="reveal">
+      <span class="section-label">Contact</span>
+      <h2 class="section-title">Get in Touch <span class="cn">联系我们</span></h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <div class="contact-item">
+          <div class="ci-icon">📧</div>
+          <div>
+            <div class="ci-label">Email</div>
+            <div class="ci-value"><a href="mailto:soundofrainassociation@gmail.com">soundofrainassociation@gmail.com</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none"><defs><radialGradient id="ig1" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="2" y="2" width="20" height="20" rx="5" stroke="url(#ig1)" stroke-width="1.5" fill="none"/><circle cx="12" cy="12" r="5" stroke="url(#ig1)" stroke-width="1.5" fill="none"/><circle cx="17.5" cy="6.5" r="1.2" fill="url(#ig1)"/></svg></div>
+          <div>
+            <div class="ci-label">Instagram</div>
+            <div class="ci-value"><a href="https://www.instagram.com/soundofrain_official" target="_blank" rel="noopener">@soundofrain_official</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none"><rect x="1" y="1" width="22" height="22" rx="5" fill="#FF2442"/><path d="M12.5 6.5c-1.1 0-2 .7-2.4 1.5h-.2c-.4-.8-1.3-1.5-2.4-1.5C6.1 6.5 5 7.8 5 9.3c0 2.8 3.6 5.7 5.3 7 .4.3.9.5 1.4.5h.6c.5 0 1-.2 1.4-.5 1.7-1.3 5.3-4.2 5.3-7 0-1.5-1.1-2.8-2.5-2.8z" fill="white"/><path d="M9.5 14h5" stroke="white" stroke-width="0.8" stroke-linecap="round"/><path d="M10.5 16h3" stroke="white" stroke-width="0.8" stroke-linecap="round"/></svg></div>
+          <div>
+            <div class="ci-label">Xiaohongshu 小红书</div>
+            <div class="ci-value"><a href="https://xhslink.com/m/1cbk67SFYs9" target="_blank" rel="noopener">Follow us on Xiaohongshu</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-icon">📍</div>
+          <div>
+            <div class="ci-label">Location</div>
+            <div class="ci-value">Seattle, Washington</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="max-w-wide">
+    <div class="footer-top">
+      <div class="footer-brand-block">
+        <img src="images/logo-dark.svg" alt="Sound of Rain">
+        <p>A 501(c)(3) nonprofit promoting Chinese-American cultural exchange through live music and community engagement in the Seattle area.</p>
+      </div>
+      <div class="footer-nav">
+        <div class="footer-nav-group">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="#band">The Band</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-nav-group">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="mailto:soundofrainassociation@gmail.com">Email</a></li>
+            <li><a href="https://www.instagram.com/soundofrain_official" target="_blank" rel="noopener">Instagram</a></li>
+            <li><a href="https://xhslink.com/m/1cbk67SFYs9" target="_blank" rel="noopener">Xiaohongshu 小红书</a></li>
+            <li><a href="https://www.zeffy.com/en-US/donation-form/donate-to-support-chinese-music" target="_blank" rel="noopener">Donate</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Sound of Rain Association 雨音音乐协会. All rights reserved.</p>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/soundofrain_official" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="16" height="16" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg> Instagram</a>
+        <a href="https://xhslink.com/m/1cbk67SFYs9" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="16" height="16" fill="none"><rect x="1" y="1" width="22" height="22" rx="5" fill="#FF2442"/><path d="M12.5 6.5c-1.1 0-2 .7-2.4 1.5h-.2c-.4-.8-1.3-1.5-2.4-1.5C6.1 6.5 5 7.8 5 9.3c0 2.8 3.6 5.7 5.3 7 .4.3.9.5 1.4.5h.6c.5 0 1-.2 1.4-.5 1.7-1.3 5.3-4.2 5.3-7 0-1.5-1.1-2.8-2.5-2.8z" fill="white"/></svg> 小红书</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+  function toggleMenu() { document.getElementById('mobile-overlay').classList.toggle('open'); }
+  function closeMenu() { document.getElementById('mobile-overlay').classList.remove('open'); }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
