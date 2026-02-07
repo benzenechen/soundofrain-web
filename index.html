@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sound of Rain 雨音乐队 — Seattle Chinese-American Music</title>
 <meta name="description" content="Sound of Rain is a Chinese-American band based in Seattle performing Mandopop, C-pop, and crossover music. A 501(c)(3) nonprofit promoting cultural exchange through live music.">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 <link rel="apple-touch-icon" href="images/favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -405,6 +401,7 @@
     .photo-grid .p7 { grid-column: 1 / -1; }
   }
   @media (max-width: 768px) {
+    html { scroll-behavior: auto; }
     .nav-links { display: none; }
     .hamburger { display: flex; }
     .hero { min-height: auto; padding-top: 7rem; padding-bottom: 3rem; }
@@ -415,6 +412,26 @@
     .footer-top { flex-direction: column; }
     .footer-nav { flex-direction: column; gap: 2rem; }
     .footer-bottom { flex-direction: column; text-align: center; }
+    /* Performance: disable heavy effects on mobile */
+    .ambient-glow { display: none; }
+    nav.scrolled { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(13,15,24,0.95); }
+    .badge-501c3 { backdrop-filter: none; -webkit-backdrop-filter: none; }
+    .full-band img { height: 35vh; }
+    /* Disable reveal animations entirely on mobile — prevents empty sections */
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .hero-eyebrow, .hero h1, .hero-desc, .hero-actions { animation: none !important; opacity: 1 !important; transform: none !important; }
+    .hero::before { display: none; }
+    .mission-banner::before { display: none; }
+    .support-section::before { display: none; }
+    .genre-card::before { display: none; }
+    .photo-item img { transition: none; }
+    .genre-card { transition: none; }
+    .role-pill { transition: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .ambient-glow { display: none; }
+    .hero-eyebrow, .hero h1, .hero-desc, .hero-actions, .hero-photo-strip { animation: none; opacity: 1; }
   }
 </style>
 </head>
@@ -508,13 +525,13 @@
       <h2 class="section-title">Live Moments <span class="cn">演出瞬间</span></h2>
     </div>
     <div class="photo-grid reveal">
-      <div class="photo-item p1"><img src="images/IMG_3376.jpg" alt="Full band on stage"></div>
-      <div class="photo-item p2"><img src="images/DSC09951.jpg" alt="Vocalist and guitarist"></div>
-      <div class="photo-item p3"><img src="images/DZ8_5060.jpg" alt="Vocalist performing"></div>
-      <div class="photo-item p4"><img src="images/DSC09948.jpg" alt="Keyboardist and bass"></div>
-      <div class="photo-item p5"><img src="images/DZ8_5121.jpg" alt="Drummer"></div>
-      <div class="photo-item p6"><img src="images/DZ8_5132.jpg" alt="Bass with banner"></div>
-      <div class="photo-item p7"><img src="images/P1010096.JPG" alt="Band with audience"></div>
+      <div class="photo-item p1"><img src="images/IMG_3376.jpg" alt="Full band on stage" loading="lazy"></div>
+      <div class="photo-item p2"><img src="images/DSC09951.jpg" alt="Vocalist and guitarist" loading="lazy"></div>
+      <div class="photo-item p3"><img src="images/DZ8_5060.jpg" alt="Vocalist performing" loading="lazy"></div>
+      <div class="photo-item p4"><img src="images/DSC09948.jpg" alt="Keyboardist and bass" loading="lazy"></div>
+      <div class="photo-item p5"><img src="images/DZ8_5121.jpg" alt="Drummer" loading="lazy"></div>
+      <div class="photo-item p6"><img src="images/DZ8_5132.jpg" alt="Bass with banner" loading="lazy"></div>
+      <div class="photo-item p7"><img src="images/P1010096.JPG" alt="Band with audience" loading="lazy"></div>
     </div>
   </div>
 </section>
@@ -583,7 +600,7 @@
         </div>
       </div>
       <div class="about-image reveal">
-        <img src="images/DZ8_8344.JPG" alt="Sound of Rain band live">
+        <img src="images/DZ8_8344.JPG" alt="Sound of Rain band live" loading="lazy">
         <div class="badge-501c3">✦ 501(c)(3) Nonprofit Organization</div>
       </div>
     </div>
@@ -682,15 +699,28 @@
   </div>
 </footer>
 
+
+
 <script>
   const nav = document.getElementById('main-nav');
   window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
   function toggleMenu() { document.getElementById('mobile-overlay').classList.toggle('open'); }
   function closeMenu() { document.getElementById('mobile-overlay').classList.remove('open'); }
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Scroll reveal with mobile fallback
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.01, rootMargin: '0px 0px -20px 0px' });
+    revealEls.forEach(el => observer.observe(el));
+    // Fallback: force show after 3s in case observer fails on mobile
+    setTimeout(() => { revealEls.forEach(el => el.classList.add('visible')); }, 3000);
+  } else {
+    revealEls.forEach(el => el.classList.add('visible'));
+  }
 </script>
 </body>
 </html>
